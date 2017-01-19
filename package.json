@@ -1,0 +1,22 @@
+{
+  "name": "tweet-marketer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/etidbury/tweet-marketer.git"
+  },
+  "author": "Edmeister",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/etidbury/tweet-marketer/issues"
+  },
+  "homepage": "https://github.com/etidbury/tweet-marketer#readme",
+  "dependencies": {
+    "twit": "^2.2.5"
+  }
+}
