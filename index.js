@@ -2,10 +2,16 @@
 global.rootRequire=function(name){
     return require(__dirname+"/"+name);
 };
+var c=rootRequire('config');
 
+/*----/debug----*/
 global.console.debug=console.log;
 
-var c=rootRequire('config');
+
+
+
+
+
 var fs = require('fs');
 
 function ensureExists(path, mask, cb) {

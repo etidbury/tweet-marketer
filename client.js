@@ -2,6 +2,18 @@ var Twit = require('twit');
 var c = rootRequire('config');
 var fs = require('fs');
 
+
+/*---debug---*/
+var fs=require('fs');
+
+/*----debug----*/
+const Console = require('console').Console;
+const output = fs.createWriteStream(c.SYSTEM.URI.TWEETED_LOG_FILE);
+const errorOutput = fs.createWriteStream(c.SYSTEM.URI.TWEETED_LOG_ERROR_FILE);
+// custom simple logger
+global.tweetLogger = new Console(output, errorOutput);
+/*---debug---*/
+
 var TweetedUsersConstraintUtil = rootRequire('lib/TweetedUsersConstraintUtil')();
 var TweetUserQueueUtil = rootRequire('lib/TweetUserQueueUtil')();
 
@@ -30,6 +42,10 @@ stream.on('tweet', function (Tweet) {
                 return;
             }
 
+            tweetLogger.log("Sup");
+
+            tweetLogger.error("random error Sup");
+
             console.debug("Added user to queue: " + Tweet.user.name);
 
 
@@ -41,6 +57,35 @@ stream.on('tweet', function (Tweet) {
     }
 
 });
+
+
+
+var postTweetFromQueue=function() {
+
+    TweetUserQueueUtil.getNextInQueue(function onComplete(err,TweetUser){
+        if (err){
+            console.error("Failed to get user from queue");
+            return;
+        }
+
+
+
+
+        //T.post('')
+
+
+
+        setTimeout(function(){
+            postTweetFromQueue();
+        },10000);
+        postTweetFromQueue();
+    });
+
+};
+
+
+postTweetFromQueue();
+
 
 
 
