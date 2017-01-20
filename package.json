@@ -18,12 +18,20 @@
   },
   "homepage": "https://github.com/etidbury/tweet-marketer#readme",
   "dependencies": {
+    "body-parser": "^1.16.0",
     "connect-ensure-login": "^0.1.1",
     "console": "^0.5.2",
+    "cookie-parser": "^1.4.3",
+    "ejs": "^2.5.5",
     "express": "^4.14.0",
+    "express-session": "^1.14.2",
     "fs": "0.0.1-security",
+    "morgan": "^1.7.0",
+    "oauth": "^0.9.15",
     "passport": "^0.3.2",
     "passport-twitter": "^1.0.4",
-    "twit": "^2.2.5"
+    "sys": "0.0.1",
+    "twit": "^2.2.5",
+    "twitter": "^1.7.0"
   }
 }

@@ -17,7 +17,6 @@ global.tweetLogger = new Console(output, errorOutput);
 var TweetedUsersConstraintUtil = rootRequire('lib/TweetedUsersConstraintUtil')();
 var TweetUserQueueUtil = rootRequire('lib/TweetUserQueueUtil')();
 
-
 var credentials = {
     consumer_key: 'BTHKUjsPwniAeOrZtIzfEpHqo',
     consumer_secret: 'bIf3cdMcd5sNXHbHCFJamBhcRda0i0salliFuof9aN5pCT32Xv',
@@ -28,13 +27,22 @@ var credentials = {
 
 var T = new Twit(credentials);
 
-var stream = T.stream('statuses/filter', {track: c.TWEET_TO_HASHTAGS, language: 'en'});
+var stream = T.stream('statuses/filter', {track: c.OPTION.FILTER_HASHTAG, language: 'en'});
 
-var i = 0;
+
+var Twitter = require('twitter');
+
+var twitterBot = new Twitter({
+    consumer_key: 'NATchpgF0k3gU680MU1kRzV3w',
+    consumer_secret: 'nFq22wlcCV8UAsgfmDSS9yx9LBUzigJZiyweWEOmD4WKGzwAZd',
+    access_token_key: '822085776397701120-lD0VX61euET6orJYyCYUCrx8qTm5pZY',
+    access_token_secret: 'hgtzsyjm0qXnS6XP3E2Mme0quRVkjYd4ZcB5TMlXQHXdD'
+});
+
 
 stream.on('tweet', function (Tweet) {
 
-    if (!TweetedUsersConstraintUtil.alreadyTweetedUser(Tweet)) {
+    if (!TweetedUsersConstraintUtil.alreadyTweetedUser(Tweet.user)) {
         TweetUserQueueUtil.addToQueue(Tweet, function (err) {
 
             if (err) {
@@ -42,11 +50,8 @@ stream.on('tweet', function (Tweet) {
                 return;
             }
 
-            tweetLogger.log("Sup");
 
-            tweetLogger.error("random error Sup");
-
-            console.debug("Added user to queue: " + Tweet.user.name);
+            //console.debug("Added user to queue: " + Tweet.user.name);
 
 
         });
@@ -59,30 +64,47 @@ stream.on('tweet', function (Tweet) {
 });
 
 
-
 var postTweetFromQueue=function() {
+
+    console.log("Get next in queue...");
 
     TweetUserQueueUtil.getNextInQueue(function onComplete(err,TweetUser){
         if (err){
-            console.error("Failed to get user from queue");
+            console.error("Failed to get user from queue:",err);
             return;
         }
 
 
+        var statusMessage= c.OPTION.TWEET_LINK+ ' '+Math.round(Math.random()*1000)+' @'+TweetUser.screen_name;
+
+        console.log("Tweeting:",statusMessage);
+
+        twitterBot.post('statuses/update', {status: statusMessage},  function(error, Tweet, response) {
+
+            if(error) {
+                console.error(error);
+            }else {
+                TweetedUsersConstraintUtil.recordTweetToUser(TweetUser);
+
+                if (Tweet) {
+                    console.log('Sent tweet', Tweet.text, " (ID:", Tweet.id, ")");
+                }
+            }
 
 
-        //T.post('')
+            setTimeout(function(){
+                postTweetFromQueue();
+            },c.OPTION.TWEET_SEND_INTERVAL>10000?c.OPTION.TWEET_SEND_INTERVAL:10000);
+
+
+        });
 
 
 
-        setTimeout(function(){
-            postTweetFromQueue();
-        },10000);
-        postTweetFromQueue();
+
     });
 
 };
-
 
 postTweetFromQueue();
 

@@ -34,12 +34,14 @@ ensureExists(c.SYSTEM.URI.OUTPUT,c.SYSTEM.OUTPUT_FOLDER_PERMISSIONS,function(err
         console.error("FS Error: Failed to create directory ",c.SYSTEM.URI.OUTPUT,err);
         return;
     }
+    console.log("Created",c.SYSTEM.URI.OUTPUT);
 
     ensureExists(c.SYSTEM.URI.TWEETED_USERS,c.SYSTEM.OUTPUT_FOLDER_PERMISSIONS,function(err){
         if (err){
             console.error("FS Error: Failed to create directory ",c.SYSTEM.URI.TWEETED_USERS,err);
             return;
         }
+        console.log("Created",c.SYSTEM.URI.TWEETED_USERS);
 
         ensureExists(c.SYSTEM.URI.TWEET_USER_QUEUE,c.SYSTEM.OUTPUT_FOLDER_PERMISSIONS,function(err) {
             if (err) {
@@ -47,8 +49,18 @@ ensureExists(c.SYSTEM.URI.OUTPUT,c.SYSTEM.OUTPUT_FOLDER_PERMISSIONS,function(err
                 return;
             }
 
-            console.log("Setting up client...");
-            require('./client');
+            ensureExists(c.SYSTEM.URI.USER_AUTH,c.SYSTEM.OUTPUT_FOLDER_PERMISSIONS,function(err) {
+                if (err) {
+                    console.error("FS Error: Failed to create directory ", c.SYSTEM.URI.TWEETED_USERS, err);
+                    return;
+                }
+
+                console.log("Created", c.SYSTEM.URI.USER_AUTH);
+
+                console.log("Setting up client...");
+                rootRequire('client');
+            });
+
         });
 
     });
