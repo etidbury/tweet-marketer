@@ -1,6 +1,11 @@
 
+global.rootRequire=function(name){
+    return require(__dirname+"/"+name);
+};
 
-var c=require('./config');
+global.console.debug=console.log;
+
+var c=rootRequire('config');
 var fs = require('fs');
 
 function ensureExists(path, mask, cb) {
@@ -30,8 +35,15 @@ ensureExists(c.SYSTEM.URI.OUTPUT,c.SYSTEM.OUTPUT_FOLDER_PERMISSIONS,function(err
             return;
         }
 
-        console.log("Setting up client...");
-        require('./client');
+        ensureExists(c.SYSTEM.URI.TWEET_USER_QUEUE,c.SYSTEM.OUTPUT_FOLDER_PERMISSIONS,function(err) {
+            if (err) {
+                console.error("FS Error: Failed to create directory ", c.SYSTEM.URI.TWEETED_USERS, err);
+                return;
+            }
+
+            console.log("Setting up client...");
+            require('./client');
+        });
 
     });
 

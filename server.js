@@ -1,7 +1,7 @@
 var express = require('express');
 var passport = require('passport');
 var Strategy = require('passport-twitter').Strategy;
-var c = require('./config');
+var c=rootRequire('config');
 
 
 

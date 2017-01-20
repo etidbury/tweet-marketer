@@ -13,8 +13,14 @@ config.SYSTEM.OUTPUT_FOLDER_PERMISSIONS='0744';
 
 
 config.SYSTEM.URI={};
-config.SYSTEM.URI.OUTPUT="./out/";
+config.SYSTEM.URI.OUTPUT=__dirname+"/out/";
 config.SYSTEM.URI.TWEETED_USERS=config.SYSTEM.URI.OUTPUT+'tweeted_users/';
+config.SYSTEM.URI.TWEET_USER_QUEUE=config.SYSTEM.URI.OUTPUT+'tweet_user_queue/';
+
+config.OPTION={};
+config.OPTION.TWEETS={};
+config.OPTION.TWEETS.NO_RETWEETS=false;
+
 
 
 
